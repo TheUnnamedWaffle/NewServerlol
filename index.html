@@ -441,11 +441,11 @@
 
         // CORRECT ANSWERS - Add multiple correct numbers with custom responses and audio
         const CORRECT_ANSWERS = {
-            '63589512': {
+            '12345678': {
                 overlayIcon: '🎉',
                 overlayTitle: 'ACCESS GRANTED',
                 overlaySubtext: 'Correct code entered!',
-                audioFile: audio/李太.m4a // Set to 'audio/success1.mp3' or similar to use custom audio
+                audioFile: null // Set to 'audio/success1.mp3' or similar to use custom audio
             },
             '11111111': {
                 overlayIcon: '🔓',
@@ -464,6 +464,14 @@
 
         // WRONG ANSWERS (SIDESTRACKS) - Specific wrong numbers with custom messages and audio
         const WRONG_ANSWERS = {
+            '63589512': {
+                message: 'Wrong number! This is 李太\'s phone.',
+                audioFile: '李太.m4a'
+            },
+            '97621245': {
+                message: 'Wrong number! This is 吳哥\'s phone.',
+                audioFile: '吳哥.m4a'
+            },
             '00000000': {
                 message: 'System error... Try a different combination.',
                 audioFile: null // Set to 'audio/error1.mp3' or similar to use custom audio
