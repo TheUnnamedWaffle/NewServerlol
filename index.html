@@ -434,9 +434,69 @@
             }
         });
 
-        // Phone functionality
-        const CORRECT_NUMBER = '12345678'; // Change this to your desired correct number (max 8 digits)
-        const MAX_DIGITS = 8; // Maximum number of digits allowed
+        // ========== CONFIGURATION ==========
+
+        // Maximum number of digits allowed
+        const MAX_DIGITS = 8;
+
+        // CORRECT ANSWERS - Add multiple correct numbers with custom responses and audio
+        const CORRECT_ANSWERS = {
+            '12345678': {
+                overlayIcon: '🎉',
+                overlayTitle: 'ACCESS GRANTED',
+                overlaySubtext: 'Correct code entered!',
+                audioFile: null // Set to 'audio/success1.mp3' or similar to use custom audio
+            },
+            '11111111': {
+                overlayIcon: '🔓',
+                overlayTitle: 'ALTERNATE CODE',
+                overlaySubtext: 'Secret path unlocked!',
+                audioFile: null
+            },
+            // Add more correct answers as needed:
+            // '99999999': {
+            //     overlayIcon: '⭐',
+            //     overlayTitle: 'BONUS CODE',
+            //     overlaySubtext: 'You found the easter egg!',
+            //     audioFile: 'audio/bonus.mp3'
+            // }
+        };
+
+        // WRONG ANSWERS (SIDESTRACKS) - Specific wrong numbers with custom messages and audio
+        const WRONG_ANSWERS = {
+            '00000000': {
+                message: 'System error... Try a different combination.',
+                audioFile: null // Set to 'audio/error1.mp3' or similar to use custom audio
+            },
+            '13371337': {
+                message: 'Nice try, hacker. Access denied!',
+                audioFile: null
+            },
+            '55555555': {
+                message: 'This line has been disconnected.',
+                audioFile: null
+            },
+            '66666666': {
+                message: 'Warning: This number is being traced!',
+                audioFile: null
+            },
+            // Add more wrong answers as needed:
+            // '99999998': {
+            //     message: 'So close! But not quite right...',
+            //     audioFile: 'audio/close.mp3'
+            // },
+            // '87654321': {
+            //     message: 'Wrong direction! Try again.',
+            //     audioFile: 'audio/wrong.mp3'
+            // },
+        };
+
+        // Default error message and audio for unspecified wrong numbers
+        const DEFAULT_ERROR_MESSAGE = 'Incorrect number. Try again!';
+        const DEFAULT_ERROR_AUDIO = null; // Set to 'audio/default_error.mp3' to use custom audio for all other wrong answers
+
+        // ====================================
+
         let currentNumber = '';
         const display = document.getElementById('display');
         const statusMessage = document.getElementById('statusMessage');
@@ -446,13 +506,6 @@
 
         // Audio Context for generating sounds
         const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-
-        // Custom audio file (if you want to use your own audio file, uncomment and specify path)
-        // To use a custom audio file:
-        // 1. Add your audio file (e.g., success.mp3) to your GitHub repository
-        // 2. Uncomment the line below and update the path
-        // const SUCCESS_AUDIO_FILE = 'success.mp3'; // or './audio/success.mp3' if in subfolder
-        const SUCCESS_AUDIO_FILE = null; // Set to null to use generated tones
 
         function playTone(frequency, duration) {
             const oscillator = audioContext.createOscillator();
@@ -471,10 +524,10 @@
             oscillator.stop(audioContext.currentTime + duration);
         }
 
-        function playSuccessSound() {
+        function playSuccessSound(audioFile = null) {
             // If custom audio file is specified, play it
-            if (SUCCESS_AUDIO_FILE) {
-                const audio = new Audio(SUCCESS_AUDIO_FILE);
+            if (audioFile) {
+                const audio = new Audio(audioFile);
                 audio.play().catch(error => {
                     console.error('Error playing audio file:', error);
                     // Fallback to generated tones if audio file fails
@@ -506,7 +559,22 @@
             }, 600);
         }
 
-        function playErrorSound() {
+        function playErrorSound(audioFile = null) {
+            // If custom audio file is specified, play it
+            if (audioFile) {
+                const audio = new Audio(audioFile);
+                audio.play().catch(error => {
+                    console.error('Error playing audio file:', error);
+                    // Fallback to generated tones if audio file fails
+                    playGeneratedErrorSound();
+                });
+            } else {
+                // Use generated tones
+                playGeneratedErrorSound();
+            }
+        }
+
+        function playGeneratedErrorSound() {
             playTone(200, 0.1);
             setTimeout(() => playTone(150, 0.2), 100);
         }
@@ -539,18 +607,47 @@
             }, 3000);
         }
 
+        function updateSuccessOverlay(icon, title, subtext) {
+            const iconElement = successOverlay.querySelector('.success-icon');
+            const titleElement = successOverlay.querySelector('.success-text');
+            const subtextElement = successOverlay.querySelector('.success-subtext');
+
+            iconElement.textContent = icon;
+            titleElement.textContent = title;
+            subtextElement.textContent = subtext;
+        }
+
         function checkNumber() {
-            if (currentNumber === CORRECT_NUMBER) {
-                playSuccessSound();
+            // Check if it's a correct answer
+            if (CORRECT_ANSWERS[currentNumber]) {
+                const answer = CORRECT_ANSWERS[currentNumber];
+
+                // Update the success overlay with custom text
+                updateSuccessOverlay(answer.overlayIcon, answer.overlayTitle, answer.overlaySubtext);
+
+                // Play audio (custom file or generated tones)
+                playSuccessSound(answer.audioFile);
+
+                // Show success animation
                 display.parentElement.classList.add('success');
                 successOverlay.classList.add('show');
 
                 setTimeout(() => {
                     display.parentElement.classList.remove('success');
                 }, 1000);
-            } else {
-                playErrorSound();
-                showStatus('Incorrect number. Try again!', 'error');
+            }
+            // Check if it's a specific wrong answer (sidetrack)
+            else if (WRONG_ANSWERS[currentNumber]) {
+                const wrongAnswer = WRONG_ANSWERS[currentNumber];
+                // Play custom audio if specified, otherwise use generated error sound
+                playErrorSound(wrongAnswer.audioFile);
+                showStatus(wrongAnswer.message, 'error');
+            }
+            // Default wrong answer
+            else {
+                // Play default error audio if specified
+                playErrorSound(DEFAULT_ERROR_AUDIO);
+                showStatus(DEFAULT_ERROR_MESSAGE, 'error');
             }
         }
 
