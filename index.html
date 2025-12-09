@@ -526,24 +526,47 @@
         const clearBtn = document.getElementById('clearBtn');
         const callBtn = document.getElementById('callBtn');
 
-        // Audio Context for generating sounds
-        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        // Audio Context for generating sounds (lazy initialization for mobile compatibility)
+        let audioContext = null;
+
+        function getAudioContext() {
+            if (!audioContext) {
+                try {
+                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    // Resume context if it's suspended (required on mobile)
+                    if (audioContext.state === 'suspended') {
+                        audioContext.resume();
+                    }
+                } catch (error) {
+                    console.error('AudioContext creation failed:', error);
+                    return null;
+                }
+            }
+            return audioContext;
+        }
 
         function playTone(frequency, duration) {
-            const oscillator = audioContext.createOscillator();
-            const gainNode = audioContext.createGain();
+            const ctx = getAudioContext();
+            if (!ctx) return; // Skip if audio context isn't available
 
-            oscillator.connect(gainNode);
-            gainNode.connect(audioContext.destination);
+            try {
+                const oscillator = ctx.createOscillator();
+                const gainNode = ctx.createGain();
 
-            oscillator.frequency.value = frequency;
-            oscillator.type = 'sine';
+                oscillator.connect(gainNode);
+                gainNode.connect(ctx.destination);
 
-            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+                oscillator.frequency.value = frequency;
+                oscillator.type = 'sine';
 
-            oscillator.start(audioContext.currentTime);
-            oscillator.stop(audioContext.currentTime + duration);
+                gainNode.gain.setValueAtTime(0.3, ctx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + duration);
+
+                oscillator.start(ctx.currentTime);
+                oscillator.stop(ctx.currentTime + duration);
+            } catch (error) {
+                console.error('Error playing tone:', error);
+            }
         }
 
         function playSuccessSound(audioFile = null) {
