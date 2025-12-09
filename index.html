@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>電話輸入器</title>
+    <title>Secret Phone</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@600;900&display=swap" rel="stylesheet">
@@ -456,10 +456,23 @@
         // CORRECT ANSWERS - Add multiple correct numbers with custom responses and audio
         const CORRECT_ANSWERS = {
             '56123517': {
-                overlayTitle: '輸入正確！',
+                overlayIcon: '✅',
+                overlayTitle: 'CONNECTED',
+                overlaySubtext: 'You reached 豬肉榮!',
                 audioFile: '豬肉榮.m4a'
-            ｝
-       
+            },
+            '12345678': {
+                overlayIcon: '🎉',
+                overlayTitle: 'ACCESS GRANTED',
+                overlaySubtext: 'Correct code entered!',
+                audioFile: null // Set to 'audio/success1.mp3' or similar to use custom audio
+            },
+            '11111111': {
+                overlayIcon: '🔓',
+                overlayTitle: 'ALTERNATE CODE',
+                overlaySubtext: 'Secret path unlocked!',
+                audioFile: null
+            },
             // Add more correct answers as needed:
             // '99999999': {
             //     overlayIcon: '⭐',
@@ -475,11 +488,26 @@
                 message: 'Wrong number! This is 李太\'s phone.',
                 audioFile: '李太.m4a'
             },
-            '96721245': {
+            '97621245': {
                 message: 'Wrong number! This is 吳哥\'s phone.',
                 audioFile: '吳哥.m4a'
-            }
-            
+            },
+            '00000000': {
+                message: 'System error... Try a different combination.',
+                audioFile: null // Set to 'audio/error1.mp3' or similar to use custom audio
+            },
+            '13371337': {
+                message: 'Nice try, hacker. Access denied!',
+                audioFile: null
+            },
+            '55555555': {
+                message: 'This line has been disconnected.',
+                audioFile: null
+            },
+            '66666666': {
+                message: 'Warning: This number is being traced!',
+                audioFile: null
+            },
             // Add more wrong answers as needed:
             // '99999998': {
             //     message: 'So close! But not quite right...',
@@ -492,7 +520,7 @@
         };
 
         // Default error message and audio for unspecified wrong numbers
-        const DEFAULT_ERROR_MESSAGE = '此電話未能接通，請再輸入';
+        const DEFAULT_ERROR_MESSAGE = 'Incorrect number. Try again!';
         const DEFAULT_ERROR_AUDIO = null; // Set to 'audio/default_error.mp3' to use custom audio for all other wrong answers
 
         // ====================================
