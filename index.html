@@ -911,24 +911,24 @@
         const CORRECT_ANSWERS = {
             '56123517': {
                 overlayIcon: '✅',
-                overlayTitle: 'CONNECTED',
-                overlaySubtext: 'You reached 豬肉榮!',
+                overlayTitle: '接通了',
+                overlaySubtext: '你已接通豬肉榮！',
                 audioFile: '豬肉榮.m4a'
             }
         };
 
         const WRONG_ANSWERS = {
             '63589512': {
-                message: 'Wrong number! This is 李太\'s phone.',
+                message: '打錯了！這是李太的電話。',
                 audioFile: '李太.m4a'
             },
             '97621245': {
-                message: 'Wrong number! This is 吳哥\'s phone.',
+                message: '打錯了！這是吳哥的電話。',
                 audioFile: '吳哥.m4a'
             }
         };
 
-        const DEFAULT_ERROR_MESSAGE = 'Incorrect number. Try again!';
+        const DEFAULT_ERROR_MESSAGE = '號碼錯誤，請重試！';
         const DEFAULT_ERROR_AUDIO = null;
 
         // ========== PHONE LOGIC ==========
@@ -1061,6 +1061,11 @@
                 setTimeout(() => {
                     display.parentElement.classList.remove('success');
                 }, 1000);
+
+                // After audio finishes or after 3 seconds, show envelope 2 message
+                setTimeout(() => {
+                    showEnvelope2Screen();
+                }, 3000);
             } else if (WRONG_ANSWERS[currentNumber]) {
                 const wrongAnswer = WRONG_ANSWERS[currentNumber];
                 playErrorSound(wrongAnswer.audioFile);
@@ -1069,6 +1074,42 @@
                 playErrorSound(DEFAULT_ERROR_AUDIO);
                 showStatus(DEFAULT_ERROR_MESSAGE, 'error');
             }
+        }
+
+        function showEnvelope2Screen() {
+            // Hide success overlay
+            successOverlay.classList.remove('show');
+
+            // Hide phone container
+            document.getElementById('phoneContainer').classList.add('hidden');
+
+            // Show intro flow with envelope 2 message
+            const introFlow = document.getElementById('introFlow');
+            introFlow.classList.remove('hidden');
+
+            // Hide all steps
+            document.querySelectorAll('.intro-step').forEach(step => {
+                step.classList.remove('active');
+            });
+
+            // Create and show envelope 2 step if it doesn't exist
+            let envelope2Step = document.getElementById('step5');
+            if (!envelope2Step) {
+                envelope2Step = document.createElement('div');
+                envelope2Step.id = 'step5';
+                envelope2Step.className = 'intro-step';
+                envelope2Step.innerHTML = `
+                    <span class="envelope-icon">✉️</span>
+                    <div class="envelope-message">
+                        請打開2號信封
+                    </div>
+                `;
+                introFlow.appendChild(envelope2Step);
+            }
+
+            envelope2Step.classList.add('active');
+            currentNumber = '';
+            updateDisplay();
         }
 
         // Keypad event listeners
@@ -1091,7 +1132,7 @@
 
         callBtn.addEventListener('click', () => {
             if (currentNumber === '') {
-                showStatus('Please enter a number first', 'error');
+                showStatus('請先輸入號碼', 'error');
                 playErrorSound();
             } else {
                 checkNumber();
