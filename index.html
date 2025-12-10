@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-HK">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>電話輸入器</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@600;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@600;900&family=Noto+Sans+HK:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-primary: #0a0e27;
@@ -62,6 +62,215 @@
             transition: background 0.3s ease;
         }
 
+        /* ========== INTRO FLOW STYLES ========== */
+        .intro-flow {
+            width: 100%;
+            max-width: 600px;
+            background: var(--bg-secondary);
+            border-radius: 32px;
+            padding: 60px 40px;
+            box-shadow:
+                0 20px 60px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            text-align: center;
+            animation: fadeIn 0.6s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .intro-step {
+            display: none;
+        }
+
+        .intro-step.active {
+            display: block;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .intro-title {
+            font-family: 'Noto Sans HK', 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 30px;
+            letter-spacing: 2px;
+        }
+
+        .intro-quote {
+            font-family: 'Noto Sans HK', serif;
+            font-size: 1.3rem;
+            line-height: 2;
+            color: var(--text-primary);
+            margin: 40px 0;
+            padding: 30px;
+            background: var(--bg-primary);
+            border-radius: 16px;
+            border-left: 4px solid var(--accent-1);
+            font-style: italic;
+            position: relative;
+        }
+
+        .intro-quote::before {
+            content: '"';
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 4rem;
+            color: var(--accent-1);
+            opacity: 0.3;
+            font-family: Georgia, serif;
+        }
+
+        .start-btn {
+            padding: 20px 60px;
+            background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+            border: none;
+            border-radius: 50px;
+            font-family: 'Noto Sans HK', 'Orbitron', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 900;
+            color: var(--bg-primary);
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 10px 30px var(--shadow-glow);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            user-select: none;
+            touch-action: manipulation;
+        }
+
+        .start-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px var(--shadow-glow);
+        }
+
+        .start-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .next-btn {
+            margin-top: 30px;
+            padding: 16px 40px;
+            background: var(--bg-button);
+            border: 2px solid var(--accent-1);
+            border-radius: 50px;
+            font-family: 'Noto Sans HK', 'JetBrains Mono', monospace;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--accent-1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+            touch-action: manipulation;
+        }
+
+        .next-btn:hover {
+            background: var(--accent-1);
+            color: var(--bg-primary);
+            transform: translateY(-2px);
+        }
+
+        .next-btn:active {
+            transform: translateY(0);
+        }
+
+        .audio-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+            padding: 12px 24px;
+            background: rgba(0, 255, 136, 0.1);
+            border-radius: 30px;
+            color: var(--accent-1);
+            font-size: 0.9rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.6;
+            }
+        }
+
+        .audio-indicator::before {
+            content: '🔊';
+            font-size: 1.2rem;
+        }
+
+        .envelope-message {
+            font-family: 'Noto Sans HK', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 60px 0;
+            padding: 40px;
+            background: var(--bg-primary);
+            border-radius: 20px;
+            border: 3px solid var(--accent-1);
+            box-shadow: 0 0 30px var(--shadow-glow);
+            animation: glow 2s infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% {
+                box-shadow: 0 0 30px var(--shadow-glow);
+            }
+            50% {
+                box-shadow: 0 0 50px var(--shadow-glow), 0 0 80px var(--shadow-glow);
+            }
+        }
+
+        .envelope-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            display: block;
+            animation: bounce 1s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* ========== PHONE CONTAINER STYLES ========== */
         .phone-container {
             width: 100%;
             max-width: 400px;
@@ -185,7 +394,6 @@
             box-shadow:
                 0 4px 12px rgba(0, 0, 0, 0.2),
                 inset 0 1px 0 rgba(255, 255, 255, 0.1);
-            /* Mobile touch optimizations */
             -webkit-tap-highlight-color: transparent;
             -webkit-touch-callout: none;
             -webkit-user-select: none;
@@ -232,7 +440,6 @@
             font-weight: 900;
         }
 
-
         .actions {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -253,7 +460,6 @@
             text-transform: uppercase;
             letter-spacing: 1px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-            /* Mobile touch optimizations */
             -webkit-tap-highlight-color: transparent;
             -webkit-touch-callout: none;
             -webkit-user-select: none;
@@ -379,6 +585,29 @@
         }
 
         @media (max-width: 480px) {
+            .intro-flow {
+                padding: 40px 25px;
+            }
+
+            .intro-title {
+                font-size: 2rem;
+            }
+
+            .intro-quote {
+                font-size: 1.1rem;
+                padding: 20px;
+            }
+
+            .start-btn {
+                padding: 18px 40px;
+                font-size: 1.1rem;
+            }
+
+            .envelope-message {
+                font-size: 1.5rem;
+                padding: 30px 20px;
+            }
+
             .phone-container {
                 padding: 30px 20px;
             }
@@ -394,7 +623,42 @@
     </style>
 </head>
 <body>
-    <div class="phone-container">
+    <!-- Intro Flow Container -->
+    <div class="intro-flow" id="introFlow">
+        <!-- Step 1: Start -->
+        <div class="intro-step active" id="step1">
+            <h1 class="intro-title">開始體驗</h1>
+            <button class="start-btn" id="startBtn">開始</button>
+        </div>
+
+        <!-- Step 2: Quote with sounds -->
+        <div class="intro-step" id="step2">
+            <div class="intro-quote" id="quoteText">
+                請閱讀引文
+            </div>
+            <div class="audio-indicator" id="audioIndicator">播放中...</div>
+            <button class="next-btn" id="nextBtn1">下一步</button>
+        </div>
+
+        <!-- Step 3: Boss opening speech -->
+        <div class="intro-step" id="step3">
+            <h2 class="intro-title" style="font-size: 1.8rem;">聆聽訊息</h2>
+            <div class="audio-indicator" id="bossAudioIndicator">播放老闆開場白...</div>
+            <button class="next-btn hidden" id="nextBtn2">繼續</button>
+        </div>
+
+        <!-- Step 4: Envelope message -->
+        <div class="intro-step" id="step4">
+            <span class="envelope-icon">✉️</span>
+            <div class="envelope-message">
+                請打開1號信封
+            </div>
+            <button class="next-btn" id="continueToPhoneBtn">繼續</button>
+        </div>
+    </div>
+
+    <!-- Phone Container (hidden initially) -->
+    <div class="phone-container hidden" id="phoneContainer">
         <div class="phone-header">
             <h1 class="phone-title">電話輸入器</h1>
             <p class="phone-subtitle">請輸入電話號碼</p>
@@ -448,98 +712,16 @@
             }
         });
 
-        // ========== CONFIGURATION ==========
+        // ========== INTRO FLOW LOGIC ==========
 
-        // Maximum number of digits allowed
-        const MAX_DIGITS = 8;
-
-        // CORRECT ANSWERS - Add multiple correct numbers with custom responses and audio
-        const CORRECT_ANSWERS = {
-            '56123517': {
-                overlayIcon: '✅',
-                overlayTitle: 'CONNECTED',
-                overlaySubtext: 'You reached 豬肉榮!',
-                audioFile: '豬肉榮.m4a'
-            },
-            '12345678': {
-                overlayIcon: '🎉',
-                overlayTitle: 'ACCESS GRANTED',
-                overlaySubtext: 'Correct code entered!',
-                audioFile: null // Set to 'audio/success1.mp3' or similar to use custom audio
-            },
-            '11111111': {
-                overlayIcon: '🔓',
-                overlayTitle: 'ALTERNATE CODE',
-                overlaySubtext: 'Secret path unlocked!',
-                audioFile: null
-            },
-            // Add more correct answers as needed:
-            // '99999999': {
-            //     overlayIcon: '⭐',
-            //     overlayTitle: 'BONUS CODE',
-            //     overlaySubtext: 'You found the easter egg!',
-            //     audioFile: 'audio/bonus.mp3'
-            // }
-        };
-
-        // WRONG ANSWERS (SIDESTRACKS) - Specific wrong numbers with custom messages and audio
-        const WRONG_ANSWERS = {
-            '63589512': {
-                message: 'Wrong number! This is 李太\'s phone.',
-                audioFile: '李太.m4a'
-            },
-            '97621245': {
-                message: 'Wrong number! This is 吳哥\'s phone.',
-                audioFile: '吳哥.m4a'
-            },
-            '00000000': {
-                message: 'System error... Try a different combination.',
-                audioFile: null // Set to 'audio/error1.mp3' or similar to use custom audio
-            },
-            '13371337': {
-                message: 'Nice try, hacker. Access denied!',
-                audioFile: null
-            },
-            '55555555': {
-                message: 'This line has been disconnected.',
-                audioFile: null
-            },
-            '66666666': {
-                message: 'Warning: This number is being traced!',
-                audioFile: null
-            },
-            // Add more wrong answers as needed:
-            // '99999998': {
-            //     message: 'So close! But not quite right...',
-            //     audioFile: 'audio/close.mp3'
-            // },
-            // '87654321': {
-            //     message: 'Wrong direction! Try again.',
-            //     audioFile: 'audio/wrong.mp3'
-            // },
-        };
-
-        // Default error message and audio for unspecified wrong numbers
-        const DEFAULT_ERROR_MESSAGE = 'Incorrect number. Try again!';
-        const DEFAULT_ERROR_AUDIO = null; // Set to 'audio/default_error.mp3' to use custom audio for all other wrong answers
-
-        // ====================================
-
-        let currentNumber = '';
-        const display = document.getElementById('display');
-        const statusMessage = document.getElementById('statusMessage');
-        const successOverlay = document.getElementById('successOverlay');
-        const clearBtn = document.getElementById('clearBtn');
-        const callBtn = document.getElementById('callBtn');
-
-        // Audio Context for generating sounds (lazy initialization for mobile compatibility)
+        let currentStep = 1;
         let audioContext = null;
+        let ambientSoundsPlaying = false;
 
         function getAudioContext() {
             if (!audioContext) {
                 try {
                     audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                    // Resume context if it's suspended (required on mobile)
                     if (audioContext.state === 'suspended') {
                         audioContext.resume();
                     }
@@ -551,9 +733,193 @@
             return audioContext;
         }
 
+        function goToStep(stepNum) {
+            // Hide all steps
+            document.querySelectorAll('.intro-step').forEach(step => {
+                step.classList.remove('active');
+            });
+
+            // Show target step
+            const targetStep = document.getElementById(`step${stepNum}`);
+            if (targetStep) {
+                targetStep.classList.add('active');
+                currentStep = stepNum;
+            }
+        }
+
+        // Simulate car engine sound
+        function playCarSound() {
+            const ctx = getAudioContext();
+            if (!ctx) return;
+
+            try {
+                const oscillator = ctx.createOscillator();
+                const gainNode = ctx.createGain();
+                const filter = ctx.createBiquadFilter();
+
+                oscillator.connect(filter);
+                filter.connect(gainNode);
+                gainNode.connect(ctx.destination);
+
+                oscillator.type = 'sawtooth';
+                oscillator.frequency.value = 80;
+
+                // Modulate frequency for engine effect
+                oscillator.frequency.setValueAtTime(80, ctx.currentTime);
+                oscillator.frequency.linearRampToValueAtTime(120, ctx.currentTime + 2);
+                oscillator.frequency.linearRampToValueAtTime(90, ctx.currentTime + 4);
+
+                filter.type = 'lowpass';
+                filter.frequency.value = 200;
+
+                gainNode.gain.value = 0.15;
+
+                oscillator.start(ctx.currentTime);
+                oscillator.stop(ctx.currentTime + 5);
+            } catch (error) {
+                console.error('Error playing car sound:', error);
+            }
+        }
+
+        // Simulate traffic light beep
+        function playTrafficLightSound() {
+            const ctx = getAudioContext();
+            if (!ctx) return;
+
+            try {
+                // Create beeping pattern
+                const beepTimes = [0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5];
+
+                beepTimes.forEach(time => {
+                    const oscillator = ctx.createOscillator();
+                    const gainNode = ctx.createGain();
+
+                    oscillator.connect(gainNode);
+                    gainNode.connect(ctx.destination);
+
+                    oscillator.frequency.value = 800;
+                    oscillator.type = 'sine';
+
+                    gainNode.gain.setValueAtTime(0, ctx.currentTime + time);
+                    gainNode.gain.linearRampToValueAtTime(0.2, ctx.currentTime + time + 0.05);
+                    gainNode.gain.linearRampToValueAtTime(0, ctx.currentTime + time + 0.2);
+
+                    oscillator.start(ctx.currentTime + time);
+                    oscillator.stop(ctx.currentTime + time + 0.2);
+                });
+            } catch (error) {
+                console.error('Error playing traffic light sound:', error);
+            }
+        }
+
+        function playAmbientSounds() {
+            if (ambientSoundsPlaying) return;
+            ambientSoundsPlaying = true;
+
+            playCarSound();
+            playTrafficLightSound();
+
+            // Stop ambient sounds after 5 seconds
+            setTimeout(() => {
+                ambientSoundsPlaying = false;
+            }, 5000);
+        }
+
+        function playBossAudio() {
+            const audio = new Audio('老闆開埸白.m4a');
+
+            audio.addEventListener('loadedmetadata', () => {
+                console.log('Boss audio loaded successfully');
+            });
+
+            audio.addEventListener('ended', () => {
+                // Show continue button when audio finishes
+                document.getElementById('nextBtn2').classList.remove('hidden');
+                document.getElementById('bossAudioIndicator').textContent = '播放完畢';
+            });
+
+            audio.addEventListener('error', (e) => {
+                console.error('Error playing boss audio:', e);
+                // Show continue button even if audio fails
+                document.getElementById('nextBtn2').classList.remove('hidden');
+                document.getElementById('bossAudioIndicator').textContent = '⚠️ 音頻文件未找到，請繼續';
+            });
+
+            audio.play().catch(error => {
+                console.error('Error playing audio:', error);
+                document.getElementById('nextBtn2').classList.remove('hidden');
+                document.getElementById('bossAudioIndicator').textContent = '⚠️ 無法播放音頻，請繼續';
+            });
+        }
+
+        // Step 1: Start button
+        document.getElementById('startBtn').addEventListener('click', () => {
+            goToStep(2);
+            // Play ambient sounds when entering step 2
+            setTimeout(() => {
+                playAmbientSounds();
+            }, 300);
+        });
+
+        // Step 2: Next button (after quote)
+        document.getElementById('nextBtn1').addEventListener('click', () => {
+            goToStep(3);
+            // Play boss audio when entering step 3
+            setTimeout(() => {
+                playBossAudio();
+            }, 500);
+        });
+
+        // Step 3: Next button (after boss audio)
+        document.getElementById('nextBtn2').addEventListener('click', () => {
+            goToStep(4);
+        });
+
+        // Step 4: Continue to phone
+        document.getElementById('continueToPhoneBtn').addEventListener('click', () => {
+            document.getElementById('introFlow').classList.add('hidden');
+            document.getElementById('phoneContainer').classList.remove('hidden');
+        });
+
+        // ========== PHONE CONFIGURATION ==========
+
+        const MAX_DIGITS = 8;
+
+        const CORRECT_ANSWERS = {
+            '56123517': {
+                overlayIcon: '✅',
+                overlayTitle: 'CONNECTED',
+                overlaySubtext: 'You reached 豬肉榮!',
+                audioFile: '豬肉榮.m4a'
+            }
+        };
+
+        const WRONG_ANSWERS = {
+            '63589512': {
+                message: 'Wrong number! This is 李太\'s phone.',
+                audioFile: '李太.m4a'
+            },
+            '97621245': {
+                message: 'Wrong number! This is 吳哥\'s phone.',
+                audioFile: '吳哥.m4a'
+            }
+        };
+
+        const DEFAULT_ERROR_MESSAGE = 'Incorrect number. Try again!';
+        const DEFAULT_ERROR_AUDIO = null;
+
+        // ========== PHONE LOGIC ==========
+
+        let currentNumber = '';
+        const display = document.getElementById('display');
+        const statusMessage = document.getElementById('statusMessage');
+        const successOverlay = document.getElementById('successOverlay');
+        const clearBtn = document.getElementById('clearBtn');
+        const callBtn = document.getElementById('callBtn');
+
         function playTone(frequency, duration) {
             const ctx = getAudioContext();
-            if (!ctx) return; // Skip if audio context isn't available
+            if (!ctx) return;
 
             try {
                 const oscillator = ctx.createOscillator();
@@ -576,51 +942,44 @@
         }
 
         function playSuccessSound(audioFile = null) {
-            // If custom audio file is specified, play it
             if (audioFile) {
                 const audio = new Audio(audioFile);
                 audio.play().catch(error => {
                     console.error('Error playing audio file:', error);
-                    // Fallback to generated tones if audio file fails
                     playGeneratedSuccessSound();
                 });
             } else {
-                // Use generated tones
                 playGeneratedSuccessSound();
             }
         }
 
         function playGeneratedSuccessSound() {
             const melody = [
-                { freq: 523.25, time: 0 },      // C5
-                { freq: 659.25, time: 0.15 },   // E5
-                { freq: 783.99, time: 0.3 },    // G5
-                { freq: 1046.50, time: 0.45 }   // C6
+                { freq: 523.25, time: 0 },
+                { freq: 659.25, time: 0.15 },
+                { freq: 783.99, time: 0.3 },
+                { freq: 1046.50, time: 0.45 }
             ];
 
             melody.forEach(note => {
                 setTimeout(() => playTone(note.freq, 0.2), note.time * 1000);
             });
 
-            // Add a final chord
             setTimeout(() => {
-                playTone(523.25, 0.5);  // C5
-                playTone(659.25, 0.5);  // E5
-                playTone(783.99, 0.5);  // G5
+                playTone(523.25, 0.5);
+                playTone(659.25, 0.5);
+                playTone(783.99, 0.5);
             }, 600);
         }
 
         function playErrorSound(audioFile = null) {
-            // If custom audio file is specified, play it
             if (audioFile) {
                 const audio = new Audio(audioFile);
                 audio.play().catch(error => {
                     console.error('Error playing audio file:', error);
-                    // Fallback to generated tones if audio file fails
                     playGeneratedErrorSound();
                 });
             } else {
-                // Use generated tones
                 playGeneratedErrorSound();
             }
         }
@@ -669,34 +1028,21 @@
         }
 
         function checkNumber() {
-            // Check if it's a correct answer
             if (CORRECT_ANSWERS[currentNumber]) {
                 const answer = CORRECT_ANSWERS[currentNumber];
-
-                // Update the success overlay with custom text
                 updateSuccessOverlay(answer.overlayIcon, answer.overlayTitle, answer.overlaySubtext);
-
-                // Play audio (custom file or generated tones)
                 playSuccessSound(answer.audioFile);
-
-                // Show success animation
                 display.parentElement.classList.add('success');
                 successOverlay.classList.add('show');
 
                 setTimeout(() => {
                     display.parentElement.classList.remove('success');
                 }, 1000);
-            }
-            // Check if it's a specific wrong answer (sidetrack)
-            else if (WRONG_ANSWERS[currentNumber]) {
+            } else if (WRONG_ANSWERS[currentNumber]) {
                 const wrongAnswer = WRONG_ANSWERS[currentNumber];
-                // Play custom audio if specified, otherwise use generated error sound
                 playErrorSound(wrongAnswer.audioFile);
                 showStatus(wrongAnswer.message, 'error');
-            }
-            // Default wrong answer
-            else {
-                // Play default error audio if specified
+            } else {
                 playErrorSound(DEFAULT_ERROR_AUDIO);
                 showStatus(DEFAULT_ERROR_MESSAGE, 'error');
             }
@@ -705,7 +1051,6 @@
         // Keypad event listeners
         document.querySelectorAll('.key').forEach(key => {
             key.addEventListener('click', () => {
-                // Only add digit if we haven't reached max length
                 if (currentNumber.length < MAX_DIGITS) {
                     const num = key.dataset.num;
                     currentNumber += num;
@@ -715,14 +1060,12 @@
             });
         });
 
-        // Clear button
         clearBtn.addEventListener('click', () => {
             currentNumber = '';
             updateDisplay();
             playTone(300, 0.1);
         });
 
-        // Call button
         callBtn.addEventListener('click', () => {
             if (currentNumber === '') {
                 showStatus('Please enter a number first', 'error');
@@ -732,7 +1075,6 @@
             }
         });
 
-        // Success overlay click to close
         successOverlay.addEventListener('click', () => {
             successOverlay.classList.remove('show');
             currentNumber = '';
@@ -742,14 +1084,12 @@
         // Keyboard support
         document.addEventListener('keydown', (e) => {
             if (e.key >= '0' && e.key <= '9') {
-                // Only add digit if we haven't reached max length
                 if (currentNumber.length < MAX_DIGITS) {
                     currentNumber += e.key;
                     updateDisplay();
                     playKeyTone(e.key);
                 }
             } else if (e.key === '*' || e.key === '#') {
-                // Only add digit if we haven't reached max length
                 if (currentNumber.length < MAX_DIGITS) {
                     currentNumber += e.key;
                     updateDisplay();
