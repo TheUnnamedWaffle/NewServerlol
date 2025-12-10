@@ -814,10 +814,27 @@
 
         function playAmbientSounds() {
             if (ambientSoundsPlaying) return;
-            ambientSoundsPlaying = true;
 
-            playCarSound();
-            playTrafficLightSound();
+            const ctx = getAudioContext();
+            if (!ctx) {
+                console.error('AudioContext not available');
+                return;
+            }
+
+            // Ensure AudioContext is running
+            if (ctx.state === 'suspended') {
+                ctx.resume().then(() => {
+                    ambientSoundsPlaying = true;
+                    playCarSound();
+                    playTrafficLightSound();
+                }).catch(err => {
+                    console.error('Failed to resume AudioContext:', err);
+                });
+            } else {
+                ambientSoundsPlaying = true;
+                playCarSound();
+                playTrafficLightSound();
+            }
 
             // Stop ambient sounds after 5 seconds
             setTimeout(() => {
@@ -826,7 +843,7 @@
         }
 
         function playBossAudio() {
-            const audio = new Audio('老闆開埸白.m4a');
+            const audio = new Audio('老闆開場白.m4a');
 
             audio.addEventListener('loadedmetadata', () => {
                 console.log('Boss audio loaded successfully');
@@ -854,6 +871,12 @@
 
         // Step 1: Start button
         document.getElementById('startBtn').addEventListener('click', () => {
+            // Initialize audio context on user interaction
+            const ctx = getAudioContext();
+            if (ctx && ctx.state === 'suspended') {
+                ctx.resume();
+            }
+
             goToStep(2);
             // Play ambient sounds when entering step 2
             setTimeout(() => {
